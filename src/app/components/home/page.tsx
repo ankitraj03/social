@@ -1,4 +1,4 @@
-import Cards from "./Cards";
+import Cards from "../cards/page";
 const Home = () => {
     return (
         <div className="w-[70%] border-l-1 border-r-1">

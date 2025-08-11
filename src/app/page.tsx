@@ -1,22 +1,22 @@
 import Image from "next/image";
-import Navbar from "./components/Navbar";
-import HomePage from "./components/Home";
-import LeftComp from "./components/LeftComp";
-import RightComp from "./components/RightComp";
-import Login from "./auth/Login";
+import Navbar from "./components/navbar/page";
+import HomePage from "./components/home/page";
+import LeftComp from "./components/leftComp/page";
+import RightComp from "./components/rightComp/page";
+import Login from "./auth/login/page";
 
 
 
 export default function Home() {
   return (
     <main>
-      {/* <Navbar/>
+      <Navbar/>
       <div className="flex">
         <LeftComp/>
         <HomePage/>
         <RightComp/>
-      </div> */}
-      <Login/>
+      </div>
+      {/* <Login/> */}
     </main>
   );
 }
