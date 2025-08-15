@@ -26,7 +26,7 @@ export const SocketProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   useEffect(() => {
     if (!user) return; 
 
-    const newSocket = io("http://localhost:5000", { transports: ["websocket"] });
+    const newSocket = io("https://social-app-backend-yqfv.onrender.com", { transports: ["websocket"] });
 
     newSocket.on("connect", () => {
       setIsConnected(true);
