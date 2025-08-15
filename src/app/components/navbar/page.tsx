@@ -20,7 +20,7 @@ const Navbar = () => {
 
     return (
         <div className="flex justify-between p-6 border-1">
-            <div>LOGO</div>
+            <div>GOSSIP<span className="text-amber-300">BOX</span></div>
             <div>
                 <ul className="flex items-center gap-4">
                     <li>btn1</li>
@@ -32,7 +32,7 @@ const Navbar = () => {
                     ) : (
                         <div
                             onClick={handleVisible}
-                            className="cursor-pointer bg-gray-300 rounded-full w-8 h-8 flex items-center justify-center font-bold"
+                            className="cursor-pointer bg-gray-800 rounded-full w-8 h-8 flex items-center justify-center font-bold"
                         >
                             {user.username.charAt(0).toUpperCase()}
                         </div>

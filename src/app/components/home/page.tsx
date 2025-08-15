@@ -87,8 +87,8 @@ const handleUpvote = async (id?: string) => {
   const currentVote = votes[id];
   let voteType: "up" | "none" | "switch" = "up";
 
-  if (currentVote === "up") voteType = "none"; // undo
-  else if (currentVote === "down") voteType = "switch"; // switch
+  if (currentVote === "up") voteType = "none"; 
+  else if (currentVote === "down") voteType = "switch"; 
 
   try {
     const res = await fetch(`http://localhost:5000/api/post/upvote/${id}`, {
@@ -116,8 +116,8 @@ const handleDownvote = async (id?: string) => {
   const currentVote = votes[id];
   let voteType: "down" | "none" | "switch" = "down";
 
-  if (currentVote === "down") voteType = "none"; // undo
-  else if (currentVote === "up") voteType = "switch"; // switch
+  if (currentVote === "down") voteType = "none"; 
+  else if (currentVote === "up") voteType = "switch"; 
 
   try {
     const res = await fetch(`http://localhost:5000/api/post/downvote/${id}`, {
