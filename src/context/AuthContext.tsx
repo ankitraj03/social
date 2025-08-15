@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const fetchUser = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/users/me", {
+      const res = await fetch("https://social-app-backend-yqfv.onrender.com/api/users/me", {
         credentials: "include",
       });
       if (res.ok) {
@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, []);
 
   const logout = async () => {
-    await fetch("http://localhost:5000/api/users/logout", {
+    await fetch("https://social-app-backend-yqfv.onrender.com/api/users/logout", {
       method: "POST",
       credentials: "include",
     });
