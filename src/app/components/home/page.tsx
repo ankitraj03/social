@@ -17,7 +17,7 @@ type VoteStatus = "up" | "down" | null;
 
 const Home = () => {
   const API_POST_SAVE =
-    process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/post/share";
+    process.env.NEXT_PUBLIC_API_URL || "https://social-app-backend-yqfv.onrender.com/api/post/share";
 
   const { user } = useAuth();
   const { socket, isConnected } = useSocket();
@@ -28,7 +28,7 @@ const Home = () => {
   useEffect(() => {
     const fetchGossips = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/post/gossips");
+        const res = await fetch("https://social-app-backend-yqfv.onrender.com/api/post/gossips");
         const data = await res.json();
         setMessages(data.reverse());
       } catch (error) {
