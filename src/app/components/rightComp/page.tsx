@@ -18,7 +18,7 @@ const RightComp = () => {
   useEffect(() => {
     const fetchTopGossip = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/post/gossip/top");
+        const res = await fetch("https://social-app-backend-yqfv.onrender.com/api/post/gossip/top");
         if (!res.ok) throw new Error("Failed to fetch top gossip");
         const data: Gossip = await res.json();
         setTopGossip(data);
