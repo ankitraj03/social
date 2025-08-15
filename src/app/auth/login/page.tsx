@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/users";
 
 const Login = () => {
+  const {fetchUser} = useAuth();
   const router = useRouter();
   const [active, setActive] = useState<"login" | "signup">("login");
 
@@ -68,6 +70,8 @@ const Login = () => {
       if (!res.ok) {
         setError(data.error || "Something went wrong");
       } else {
+        await fetchUser();
+
         console.log(`${active} success`, data);
 
 

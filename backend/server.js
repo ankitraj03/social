@@ -5,6 +5,7 @@ import auth_route from './routes/auth_route.js'
 import { rateLimiter } from "./middleware/ratelimiter.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import gossipRoute from './routes/gossips_route.js'
 dotenv.config();
 
 const app = express();
@@ -22,6 +23,7 @@ app.use(express.json());
 
 app.use(rateLimiter);
 app.use("/api/users", auth_route);
+app.use("/api/post", gossipRoute);
 
 
 

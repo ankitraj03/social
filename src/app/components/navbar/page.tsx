@@ -1,9 +1,10 @@
 'use client'
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { useAuth } from "@/context/AuthContext";
 
 const Navbar = () => {
-    const [user, setUser] = useState<{ username: string } | null>(null);
+    const { user, logout } = useAuth();
     const [visible, setVisible] = useState(false);
 
 
@@ -12,38 +13,10 @@ const Navbar = () => {
     };
 
 
-    useEffect(() => {
-        async function fetchUser() {
-            try {
-                const res = await fetch("http://localhost:5000/api/users/me", {
-                    credentials: "include",
-                });
-                if (!res.ok) {
-                    setUser(null);
-                    return;
-                }
-                const data = await res.json();
-                setUser(data);
-            } catch {
-                setUser(null);
-            }
-        }
-        fetchUser();
-    }, []);
-
- 
-    const onLogout = async () => {
-        try {
-            await fetch("http://localhost:5000/api/users/logout", {
-                method: "POST",
-                credentials: "include",
-            });
-            setUser(null);
-            setVisible(false);
-        } catch (err) {
-            console.error("Logout failed", err);
-        }
-    };
+    const handleLogout = async () => {
+    await logout();
+    setVisible(false);
+  };
 
     return (
         <div className="flex justify-between p-6 border-1">
@@ -67,7 +40,7 @@ const Navbar = () => {
 
                     {visible && (
                         <button
-                            onClick={onLogout}
+                            onClick={handleLogout}
                             className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
                         >
                             Logout

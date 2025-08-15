@@ -1,12 +1,11 @@
 type Reaction = {
-  emoji: string;
+  type: "upvote" | "downvote";
   count: number;
 };
 
 const reactions: Reaction[] = [
-  { emoji: "🤩", count: 0 },
-  { emoji: "😳", count: 0 },
-  { emoji: "😔", count: 0 },
+  { type: "upvote", count: 0 },
+  { type: "downvote", count: 0 },
 ];
 
 const Cards: React.FC = () => {
@@ -25,8 +24,8 @@ const Cards: React.FC = () => {
 
       <div className="flex justify-end items-center gap-4 text-xl mt-4">
         {reactions.map((reaction, index) => (
-          <div key={index} className="flex items-center gap-1">
-            <span>{reaction.emoji}</span>
+          <div key={index} className="flex items-center gap-1 cursor-pointer select-none">
+            <span>{reaction.type === "upvote" ? "⬆️" : "⬇️"}</span>
             <span className="text-sm">{reaction.count}</span>
           </div>
         ))}
@@ -36,3 +35,4 @@ const Cards: React.FC = () => {
 };
 
 export default Cards;
+  
