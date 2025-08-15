@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/users";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://social-app-backend-yqfv.onrender.com/api/users";
 
 const Login = () => {
   const {fetchUser} = useAuth();
