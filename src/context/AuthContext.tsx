@@ -5,7 +5,6 @@ interface User {
   username: string;
   email: string;
 }
-
 interface AuthContextType {
   user: User | null;
   logout: () => void;

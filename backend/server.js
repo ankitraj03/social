@@ -5,7 +5,9 @@ import auth_route from './routes/auth_route.js'
 import { rateLimiter } from "./middleware/ratelimiter.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import gossipRoute from './routes/gossips_route.js'
+import gossipRoute from './routes/gossips_route.js';
+import http from "http";
+import { Server } from "socket.io";
 dotenv.config();
 
 const app = express();
@@ -19,6 +21,27 @@ app.use(cors({
 
 
 app.use(express.json());
+
+const server = http.createServer(app);
+const io= new Server(server, {
+  cors:{
+    origin:"http://localhost:3000",
+    methods: ["GET", "POST"]
+  }
+});
+
+io.on("connection", (socket) => {
+  console.log(`User connected: ${socket.id}`);
+
+  socket.on("newGossip", (data) => {
+    console.log("New gossip received:", data);
+    io.emit("gossipBroadcast", data);
+  });
+
+  socket.on("disconnect", () => {
+    console.log(`User disconnected: ${socket.id}`);
+  });
+});
 
 
 app.use(rateLimiter);
@@ -38,6 +61,6 @@ app.get("/", (req, res) => {
 });
 
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });

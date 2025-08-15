@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Cards from "../cards/page";
 import { useAuth } from "@/context/AuthContext";
 import { FaUser, FaPaperPlane } from "react-icons/fa";
+import { io } from "socket.io-client";
 
 type Post = {
   _id?: string;
@@ -13,46 +14,42 @@ type Post = {
   downvote?: number;
 };
 
+const socket = io("http://localhost:5000", { transports: ["websocket"] });
+
 const Home = () => {
   const API_POST_SAVE =
-    process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/post/share";
-  // const API_POST_GET =
-  //   API_POST_SAVE.replace(/\/share\/?$/i, "") || "http://localhost:5000/api/post";
+    process.env.NEXT_PUBLIC_API_URL ||
+    "http://localhost:5000/api/post/share";
 
   const { user } = useAuth();
-
   const [gossip, setGossip] = useState("");
   const [messages, setMessages] = useState<Post[]>([]);
 
-  const addMessage = (msg: Post) => {
-    setMessages((prev) => {
-      const exists = prev.some((m) => {
-        if (m._id && msg._id) return m._id === msg._id;
-        return (
-          m.time === msg.time &&
-          m.username === msg.username &&
-          m.gossip === msg.gossip
-        );
-      });
-      if (exists) return prev;
-      return [msg, ...prev];
+  useEffect(() => {
+    
+    const fetchGossips=async()=>{
+      try{
+        const res=await fetch('http://localhost:5000/api/post/gossips');
+        const data= await res.json();
+        setMessages(data);
+      }catch{
+        console.error("Error fetching gossips:");
+      }
+    };
+    fetchGossips();
+
+
+
+    socket.on("gossipBroadcast", (msg: Post) => {
+      console.log("📩 New gossip:", msg);
+      setMessages((prev) => [msg,...prev]); 
+      console.log("✅ Connected to Socket.IO:", socket.id);
     });
-  };
 
-  // useEffect(() => {
-  //   const fetchPosts = async () => {
-  //     try {
-  //       const res = await fetch(API_POST_GET);
-  //       const data = await res.json();
-  //       const posts: Post[] = Array.isArray(data) ? data.reverse() : [];
-  //       setMessages(posts);
-  //     } catch (err) {
-  //       console.error("Error fetching posts:", err);
-  //     }
-  //   };
-
-  //   fetchPosts();
-  // }, [API_POST_GET]);
+    return () => {
+      socket.off("gossipBroadcast");
+    };
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setGossip(e.target.value);
@@ -82,20 +79,22 @@ const Home = () => {
 
       if (!res.ok) {
         const text = await res.text();
-        throw new Error(`Save failed: ${text}`);
+        throw Error(`Save failed: ${text}`);AbortController
       }
 
-      const saved: Post = await res.json();
-      addMessage(saved);
+      socket.emit("newGossip", submission); 
       setGossip("");
     } catch (error) {
       console.error("Error submitting gossip:", error);
     }
   };
 
+
+  
+
   return (
-    <div className="w-[70%] border-l-1 border-r-1">
-      <div className="p-14">
+    <div className="w-full flex flex-col flex-1">
+      <div className="p-4 lg:p-14 ">
         <div className="flex">
           <div className="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center text-white text-lg">
             {user ? user.username.charAt(0).toUpperCase() : <FaUser />}
@@ -107,20 +106,21 @@ const Home = () => {
             value={gossip}
             onChange={handleChange}
             placeholder="share your thoughts"
-            className="border-0 mx-5 border-b-1 text-gray-700 w-[80%] focus:outline-none focus:border-b-1 focus:ring-0"
+            className="border-0 mx-5 border-b-1 text-gray-700 w-[80%] focus:outline-none"
           />
           <span
             onClick={handleSubmit}
-            className="bg-gray-600 text-center py-4 px-8 rounded-2xl cursor-pointer"
+            className="lg:bg-gray-600 text-center py-1 px-2 lg:py-4 lg:px-8 rounded-2xl cursor-pointer"
           >
             <FaPaperPlane />
           </span>
         </div>
       </div>
+
       <hr className="text-white w-full" />
       <hr className="text-white my-8 w-full" />
 
-      <div>
+      <div className="flex-1 overflow-y-auto scroll-auto">
         {messages.map((msg, i) => (
           <div
             key={msg._id ?? `${msg.time}-${i}`}
@@ -134,9 +134,7 @@ const Home = () => {
         ))}
       </div>
 
-      <div>
-        <Cards />
-      </div>
+      
     </div>
   );
 };

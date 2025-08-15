@@ -2,10 +2,9 @@ import { FaSearch } from "react-icons/fa";
 
 const RightComp = () => {
   return (
-    <div className="w-[15%] bg-black text-white p-4 space-y-6">
-      
-
-      <div className="flex items-center bg-white rounded-md overflow-hidden">
+    <div className="hidden lg:block lg:w-[25%] lg:bg-black lg:text-white ">
+      <div className="lg:p-4 w-[90%]">
+        <div className="flex items-center bg-white rounded-md overflow-hidden m-3">
         <input
           type="text"
           placeholder="search"
@@ -26,6 +25,10 @@ const RightComp = () => {
           and useful.
         </p>
       </div>
+      </div>
+      
+
+      
     </div>
   );
 };
